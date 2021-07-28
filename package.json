@@ -4,6 +4,7 @@
   "description": "12. SQL Challenge\r ## Purpose\r We Are Making a Employee Tracker",
   "main": "index.js",
   "dependencies": {
+    "NODE": "0.0.0",
     "console.table": "^0.10.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
