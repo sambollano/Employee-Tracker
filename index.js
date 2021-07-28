@@ -1,165 +1,96 @@
-const inquirer = require("inquirer");
-const db = require('./db/connection');
+const express = require("express");
+const mysql = require("mysql2");
 
-const userAction = () => {
-    inquirer.prompt([
-        {
-            type: 'list',
-            name: 'action',
-            message: 'What would you like to do?',
-            choices: [
-                {
-                    name: 'View All Departments',
-                    value: 'view_departments'
-                },
-                {
-                    name: 'View All Roles',
-                    value: 'view_roles'
-                },
-                {
-                    name: 'View All Employees',
-                    value: 'view_employees'
-                },
-                {
-                    name: 'Add a Department',
-                    value: 'add_department'
-                },
-                {
-                    name: 'Add a Role',
-                    value: 'add_role'
-                },
-                {
-                    name: 'Add an Employee',
-                    value: 'add_employee'
-                },
-                {
-                    name: 'Update and Employee',
-                    value: 'update_employee'
-                },
-                {
-                    name: 'Exit Application',
-                    value: 'exit'
-                }
-            ]
-        }
-    ]).then(answers => {
-        switch(answers.action){
-            case 'view_departments':
-                return viewDepartments();
-                break;
-            case 'view_roles' :
-                return viewRoles();
-                break;
-            case 'view_employees' :
-                return viewEmployees();
-                break;
-            case 'add_department' :
-                return addDepartment();
-                break;
-            case 'add_role' :
-                return addRole();
-                break;
-            case 'add_employee' :
-                return addEmployee();
-                break;
-            case 'update_employee' :
-                return updateEmployee();
-                break;
-            default:
-                return process.exit();
-        }
-    })
-}
+const PORT = process.env.PORT || 5500;
+const app = express();
 
-const viewDepartments = () => {
-    const sql = 'SELECT * FROM department'
-    db.query(sql, (err, res) => {
-        if (err) throw err
-        console.table(res)
-    }) 
-    userAction();
-}
+// Middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-const viewRoles = () => {
-    const sql = 'SELECT * FROM role';
-    db.query(sql, (err, res) => {
-        if (err) throw err
-        console.table(res)
-    }) 
-    userAction();
-}
+// connect to the database
+const database = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "Root",
+  database: "Employee_Tracker",
+});
 
-const viewEmployees = () => {
-    //query db to get all info
-    //return info
-    var query = 'SELECT * FROM employee'
-    db.query(query, function(err, results) {
-        console.log('hello');
-        console.log(results);
-    }) 
-    //ask the user for action again
-    userAction();
-}
+// get request
+app.get("/api/departments", (req, res) => {
+  const sql = `SELECT * FROM department`;
 
-const addDepartment = () => {
-        inquirer.prompt({
-            type: 'input',
-            message: 'Enter Department Name',
-            name: 'department'
-        })
-        .then(function(answer) {
-            db.query(
-                "INSERT INTO department SET ?",
-                {
-                    name: res.name
-                },
-                function(err, answer) {
-                    if (err) {
-                        throw err;
-                    }
-                }
-            )
-        })
-        userAction()
+  database.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
     }
-    
+    res.json({
+      message: "success",
+      data: rows,
+    });
+  });
+});
 
-const addRole = () => {
-    db.query('SELECT role.title AS Title, role.salary AS Salary FROM role', function(err,res) {
-        inquirer.prompt([
-            {
-                name: 'Title',
-                type: 'input',
-                message: "What Role will this Title have?"
-            },
-            {
-                name: "Salary",
-                type: 'input',
-                message: "Enter the Role's Salary"
-            }
+app.get("/api/roles", (req, res) => {
+  const sql = `SELECT * FROM employee_role`;
 
-        ]).then(function(res) {
-            db.query(
-                "INSERT INTO role SET ?",
-                {
-                    title: res.Title,
-                    salary: res.Salary,
-                },
-                function(err) {
-                    if (err) throw err
-                    conesole.table(res);
-                }
-            )
-        });
-    }); 
-    userAction()
-}
+  database.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "success",
+      data: rows,
+    });
+  });
+});
 
+app.get("/api/employees", (req, res) => {
+  const sql = `SELECT * FROM employee`;
 
-const addEmployee = () => {
+  database.query(sql, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "success",
+      data: result,
+    });
+  });
+});
 
-}
+// post request
+app.post("/api/employeemanager", ({ body }, res) => {
+  const sql = `INSERT INTO employee (first_name, last_name, emp_role_id) 
+  VALUES (?,?,?)`;
+  const params = [body.first_name, body.last_name, body.emp_role_id];
 
-const updateEmployee = () => {
+  database.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "succes",
+      data: body,
+      changes: result.affectedRows,
+    });
+  });
+});
 
-}
+// Default for error in request
+app.use((req, res) => {
+  res.status(404).end();
+});
+
+// Server ago
+database.connect((err) => {
+  if (err) throw err;
+  console.log("Database connected");
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});
