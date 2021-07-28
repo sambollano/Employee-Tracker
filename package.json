@@ -1,5 +1,5 @@
 {
-  "name": "employee-tracker",
+  "name": "employee_tracker",
   "version": "1.0.0",
   "description": "12. SQL Challenge\r ## Purpose\r We Are Making a Employee Tracker",
   "main": "index.js",
@@ -13,7 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "jest",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "repository": {
