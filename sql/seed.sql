@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS Employee;
+
+CREATE database Employee_Tracker;
+
 USE Employee_Tracker;
 
 INSERT INTO department (name)
