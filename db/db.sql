@@ -1,5 +1,1 @@
-DROP DATABASE IF EXISTS Employee_Tracker;
-
-CREATE DATABASE Employee_Tracker;
-
-USE Employee_Tracker;
+Hey Sean I Just Submitted Project 13. E-Commerce back End. thank you!!!

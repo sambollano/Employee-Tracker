@@ -498,8 +498,5 @@ function quit() {
     connection.end();
     process.exit();
 }
-// ETM employee tracking system on app start.
-
-console.log("^^^***********************************************^^^\n|	________     __________     __      __      |\n|      |   _____|   |____  ____|   |   |  |   |     |\n|      |  |___           | |       |  _ || _  |     |\n|      |   ___|          | |       | | |  | | |     |\n|      |  |_____         | |       | |  ||  | |     |\n|      |________|        |_|       |_|      |_|     |\n|                                                   |\n|	      Employee Tracking Manager             |\n|                                                   |\n^^^***********************************************^^^\n\nv1.0.0\nMAIN MENU\n");
 
 startApp();
