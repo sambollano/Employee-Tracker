@@ -33,13 +33,13 @@ const db = new Database({
   port: 5500,
   user: "root",
   password: "Root",
-  database: "Employee_Tracker",
+  database: "employee_tracker",
 });
 // Builds complete employee table
 async function showEmployeeSummary() {
     console.log(' ');
     await db.query('SELECT e.id, e.first_name AS First_Name, e.last_name AS Last_Name, r.title AS Title, r.salary AS Salary, d.dept_name AS Department, CONCAT(m.first_name, " ", m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN roles r ON e.role_id = r.id INNER JOIN department d ON r.department_id = d.id ORDER BY e.id', (err, res) => {
-        if (err) throw err;
+        
         console.table(res);
         startApp();
     });

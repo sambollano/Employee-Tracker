@@ -1,14 +1,17 @@
 const mysql =require('mysql2');
+const returnPassword = require('../configuration/configureation')
 
-const connection = mysql.createConnection({
-    host: 'localhost',
+var mysql = require('mysql2');
+var mysqlPool = mysql.createPool({
+    host: Path,
+    user: root,
     port: 5500,
-    user: 'root',
-    password: "Root",
-    database: 'Employee_Tracker'
+    password: Root,
+    database: employee_tracker,
+    
 });
 
-db.connect(function(err) {
+connection.connect((err) => {
     if (err) throw err
     console.log("You have connected to MySQL " + connection.threadId)
 });
