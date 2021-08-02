@@ -1,6 +1,7 @@
-const mysql = require("mysql2");
+
 const inquirer = require("inquirer");
 
+const Employee = require("./")
 
 class Database {
     constructor(config) {
@@ -28,13 +29,7 @@ class Database {
     }
 }
 
-const db = new Database({
-  host: "localhost",
-  port: 5500,
-  user: "root",
-  password: "Root",
-  database: "employee_tracker",
-});
+
 // Builds complete employee table
 async function showEmployeeSummary() {
     console.log(' ');
@@ -180,7 +175,8 @@ async function updateManager() {
             let mgID = managers.find(obj => obj.name === managerInfo.mgName).id
             db.query("UPDATE employee SET manager_id=? WHERE id=?", [mgID, empID]);
             console.log("\x1b[32m", `${employeeInfo.empName} now reports to ${managerInfo.mgName}`);
-            startApp();
+        
+        startApp();
         })
     })
 };
